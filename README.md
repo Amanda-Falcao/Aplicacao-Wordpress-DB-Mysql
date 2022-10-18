@@ -136,4 +136,4 @@ Após isso, o terminal de comando é aberto e direcionado a pasta criada. Com is
 ~~~
 docker compose up
 ~~~
-Por fim, o navegador é aberto e é possível o acesso à aplicação.
+Por fim, o navegador é aberto e é possível o acesso à aplicação, através do endereço "localhost:8080".
