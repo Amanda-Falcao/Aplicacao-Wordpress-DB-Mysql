@@ -132,4 +132,8 @@ networks:
       driver: bridge    
 ~~~
 
-
+Após isso, o terminal de comando é aberto e direcionado a pasta criada. Com isso digite o comando:
+~~~
+docker compose up
+~~~
+Por fim, o navegador é aberto e é possível o acesso à aplicação.
