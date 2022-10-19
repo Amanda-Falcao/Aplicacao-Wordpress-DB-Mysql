@@ -2,41 +2,45 @@ version: '3.6'
 
 services: 
 
-   db:
-     image: mysql:8.0.31
-     restart: always
-     volumes:
-      - ./db:/var/lib/mysql   
-     command: mysqld --default_authentication_plugin=mysql_native_password
-     environment:
+  db:
+    image: mysql:8.0.31
+    restart: always
+    volumes:
+      - db_volume:/var/lib/mysql   
+    command: mysqld --default_authentication_plugin=mysql_native_password
+    environment:
       TZ: America/Sao_Paulo
       MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD 
       MYSQL_USER: $MYSQL_USER
       MYSQL_PASSWORD: $MYSQL_PASSWORD
       MYSQL_DATABASE: $MYSQL_DATABASE
-     ports:
+    ports:
       - 3308:3306
-     networks:
+    networks:
       - network-docker
 
-   wordpress:
-     image: wordpress:6.0.2
-     restart: always
-     volumes:
-      - ./wp-app:/var/www/html
-     ports:
+  wordpress:
+    image: wordpress:6.0.2
+    restart: always
+    volumes:
+      - wp_volume:/var/www/html
+    ports:
       - 8080:80
-     depends_on:
+    depends_on:
       - db
-     environment:
+    environment:
       TZ: America/Sao_Paulo
       WORDPRESS_DB_HOST: $WORDPRESS_DB_HOST
       WORDPRESS_DB_NAME: $WORDPRESS_DB_NAME
       WORDPRESS_DB_USER: $WORDPRESS_DB_USER
       WORDPRESS_DB_PASSWORD: $WORDPRESS_DB_PASSWORD
-     networks:
+    networks:
       - network-docker
    
 networks:
-     network-docker:
-      driver: bridge 
+  network-docker:
+    driver: bridge 
+
+volumes:
+  db_volume:
+  wp_volume:
