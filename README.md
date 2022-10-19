@@ -56,7 +56,6 @@ O segundo apresentado será o wordpress:
         image: wordpress:6.0.2
         restart: always
         volumes:
-         - ./config/php.conf.uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
          - ./wp-app:/var/www/html
         ports:
          - 8080:80
@@ -115,7 +114,6 @@ services:
      image: wordpress:6.0.2
      restart: always
      volumes:
-      - ./config/php.conf.uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ./wp-app:/var/www/html
      ports:
       - 8080:80
