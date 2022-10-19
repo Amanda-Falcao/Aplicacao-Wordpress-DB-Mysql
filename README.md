@@ -1,12 +1,15 @@
 # Atividade Aplicação Wordpress + DB Mysql
 Esta documentação irá descrever e detalhar o processo de inicializar uma aplicação WordPress com um banco de dados MySQL usando o Docker Compose.
 
-É necessário verificar se a máquina possui Docker instalado, e após isso verificar também o Docker Compose; caso não, realize a instalação de ambos. Neste caso, foi utilizado o Docker Desktop, o qual já possui o Docker Compose.
+É necessário verificar se a máquina possui Docker instalado, e após isso verificar também o Docker Compose; caso não, realize a instalação de ambos. Neste caso, foi utilizado o Docker Desktop, o qual já possui o Docker Compose.  
+Para realizar a instalação do Docker, siga a [documentação oficial](https://docs.docker.com/get-docker/).
+Para a realização da instalação do Docker Compose, basta seguir [as instruções](https://github.com/docker/compose/) do respositório no GitHub.
+
 
 ## Ambiente
 Crie uma pasta específica para a aplicação e nela crie um arquivo chamado **docker-compose.yml**
 
-Dentro deste arquivo serão definidos os paramêtros, ele será do tipo YAML.
+Dentro deste arquivo serão definidos os paramêtros da aplicação que queremos subir.
 
 ### Arquivo
  É valido salientar que a indentação de arquivos YAML é feita só com espaços, e a indentação correta é fundamental para a execução da aplicação.
@@ -19,7 +22,7 @@ version: '3.6'
 services:
 ~~~
 
- Os serviços em questão serão Wordpress e DB, que basicamente funcionarão como contêiners.
+ Os serviços em questão serão Wordpress e DB.
 
  O primeiro apresentado será o db:
 ~~~
@@ -40,11 +43,11 @@ db:
      networks:
       - network-docker
 ~~~
-Primeiramente é determinada qual imagem, docker image, será utilizada do banco de dados Mysql, logo após isso, é definido também o restart: always, que diz ao Docker para reiniciar o contêiner db em caso de falha.
+Primeiramente é determinada qual imagem (image) será utilizada do banco de dados Mysql. Foi escolhida a versão 8.0.31 da imagem, a mais estável até o presente dia. Logo após isso, é definido também o restart: always, que diz ao Docker para reiniciar o contêiner db em caso de falha.
 
-Logo após, o volume - ./db:/var/lib/mysql  é definido, com o intuito de não perdermos as mudanças feitas no banco de dados. O command serve para inicializar o MySQL no modo de autenticação nativo.
+Logo após, o volume - ./db:/var/lib/mysql  é definido, com o intuito de persistir os dados do banco de dados mesmo após o contêiner ser parado. O command serve para inicializar o MySQL no modo de autenticação nativo.
 
-A próxima propriedade definida é o environment, e nela são definidas os valores das variáveis de ambiente dentro do contêiner. A variável TZ é referente ao timezone de onde o contêiner está sendo executado;  a variável MYSQL_ROOT_PASSWORD irá definir a senha do usuário root; a variável MYSQL_USER indicará o usuário, o MYSQL_PASSWORD indicará a senha do usuário fornecido anteriormente; e a variável MYSQL_DATABASE indicará a aplicação. E por fim indicaremos a rede network-docker que será definida ao final.
+A próxima propriedade definida é o environment, e nela são definidas os valores das variáveis de ambiente dentro do contêiner. A variável TZ é referente ao timezone de onde o contêiner está sendo executado;  a variável MYSQL_ROOT_PASSWORD irá definir a senha do usuário root; a variável MYSQL_USER indicará o usuário, o MYSQL_PASSWORD indicará a senha do usuário fornecido anteriormente; e a variável MYSQL_DATABASE indicará a aplicação. Definimos a porta utilizada pelo contêiner: 3308 no host, 3306 no contêiner. E por fim indicamos que o contêiner utilizará a rede network-docker, que será definida no final do arquivo.
 
 O segundo apresentado será o wordpress:
 
@@ -68,14 +71,14 @@ O segundo apresentado será o wordpress:
         networks:
          - network-docker
 ~~~
-Primeiro é especificada qual a imagem, Docker image, do wordpress, e nesse caso foi a 6.0.2, a última mais estável até o momento. Após isso é definido restart: always, que diz ao Docker para reiniciar o contêiner wordpress em caso de falha. 
-Logo após iremos especificar os volumes utilizados em questão, definido ./wordpress:/var/www/html é passado ao Docker que, qualquer alteração na nossa pasta criada, a mudança também deve ser realizada na pasta /var/www/html do contêiner.
+Primeiro é especificada qual a imagem do Wordpress será utilizada. Nesse caso foi a 6.0.2, a mais estável até o momento da realização desta atividade. Após isso é definido restart: always, que diz ao Docker para reiniciar o contêiner wordpress em caso de falha. 
+Logo após iremos especificar os volumes utilizados para persistir os dados do contêiner, definido ./wordpress:/var/www/html. Esse diretório será utilizado para que o contêiner guarde e use dados que estão no diretório.
 
 Em seguida as portas são definidas, que no caso será a 80 no contêiner e 8080 no host. Outra propriedade é adicionada, a depends_on, que indicará ao docker compose que o serviço do wordpress depende do serviço do db, e com isso, o db deverá iniciar antes.
 
 A próxima propriedade definida é o environment, e nela são definidas os valores das variáveis de ambiente dentro do contêiner. A variável TZ é referente ao timezone de onde o contêiner está sendo executado; a variável WORDPRESS_DB_HOST indicará o banco de dados hospedeiro da aplicação wordpress; a WORDPRESS_DB_NAME indicará o nome desejado ao banco de dados; a variável
-WORDPRESS_DB_USER indicará o usuário, o WORDPRESS_DB_PASSWORD indicaráa senha do usuário fornecido anteriormente. 
-E por fim indicaremos a rede network-docker que será definida ao final.
+WORDPRESS_DB_USER indicará o usuário, o WORDPRESS_DB_PASSWORD indicará a senha do usuário fornecido anteriormente. 
+E por fim indicaremos que o Wordpress utilizará a rede network-docker.
 
 Por último é adicionada a propriedade networks, o nome da rede, como já foi visto, será network-docker e ela será inicializada em modo bridge.
  ~~~
@@ -136,4 +139,4 @@ Após isso, o terminal de comando é aberto e direcionado a pasta criada. Com is
 ~~~
 docker compose up
 ~~~
-Por fim, o navegador é aberto e é possível o acesso à aplicação, através do endereço "localhost:8080".
+Quando a aplicação terminar de subir, é possível acessar o Wordpress através do endereço "localhost:8080".
