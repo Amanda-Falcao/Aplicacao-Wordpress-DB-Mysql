@@ -1,4 +1,4 @@
-# Atividade Aplicação Wordpress + DB Mysql
+#  Aplicação Wordpress + DB Mysql
 Esta documentação irá descrever e detalhar o processo de inicializar uma aplicação WordPress com um banco de dados MySQL usando o Docker Compose.
 
 É necessário verificar se a máquina possui Docker instalado, e após isso verificar também o Docker Compose; caso não, realize a instalação de ambos. Neste caso, foi utilizado o Docker Desktop, o qual já possui o Docker Compose.  
